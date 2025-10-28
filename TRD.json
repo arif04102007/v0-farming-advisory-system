@@ -1,0 +1,245 @@
+{
+  "projectName": "Farming Advisory System",
+  "projectDescription": "An intelligent agricultural recommendation platform designed to help small farmers in India make data-driven decisions about crop selection based on their farm conditions, budget, and experience level.",
+  "version": "1.0.0",
+  "hackathonCategory": "Agriculture Technology",
+  "targetAudience": "Small-scale farmers in India (1-5 hectares)",
+  "problemStatement": "Small farmers in India face significant challenges in crop selection due to lack of access to personalized agricultural advice. They often make suboptimal decisions leading to poor yields, financial losses, and unsustainable farming practices. This system provides data-driven recommendations tailored to individual farm conditions.",
+  "solution": "A web-based platform that analyzes farm-specific parameters (soil type, water availability, budget, region, experience) and recommends the most suitable crops with detailed guidance on cultivation practices, profitability projections, and farming calendars.",
+  "keyFeatures": [
+    "Personalized crop recommendations based on 8+ major Indian crops",
+    "Multi-factor analysis: soil type, water availability, budget, region, season, experience",
+    "Profitability calculations with cost-benefit analysis",
+    "Risk assessment for pest management and crop complexity",
+    "Automated farming calendar with month-by-month activities",
+    "Multi-language support (English and Hindi)",
+    "Responsive design for mobile and desktop access",
+    "Real-time suitability scoring (0-100%)"
+  ],
+  "technicalStack": {
+    "frontend": {
+      "framework": "Next.js 16 (App Router)",
+      "language": "TypeScript",
+      "styling": "Tailwind CSS v4",
+      "components": "shadcn/ui",
+      "stateManagement": "React Hooks"
+    },
+    "backend": {
+      "runtime": "Node.js (Next.js API Routes)",
+      "language": "TypeScript"
+    },
+    "database": "None (In-memory knowledge base)",
+    "deployment": "Vercel"
+  },
+  "dataModel": {
+    "Crop": {
+      "id": "string",
+      "name": "string",
+      "hindiName": "string",
+      "season": "enum: kharif|rabi|both",
+      "waterRequirement": "number (mm)",
+      "soilTypes": "string[]",
+      "temperatureRange": "[number, number]",
+      "rainfallRange": "[number, number]",
+      "costPerHectare": "number (Rs)",
+      "yieldPerHectare": "number (kg)",
+      "pricePerKg": "number (Rs)",
+      "growthPeriod": "number (days)",
+      "plantingMonth": "number[]",
+      "harvestMonth": "number[]",
+      "fertilizer": {
+        "nitrogen": "number (kg/ha)",
+        "phosphorus": "number (kg/ha)",
+        "potassium": "number (kg/ha)"
+      },
+      "pesticides": "string[]",
+      "practices": "string[]"
+    },
+    "FarmerInput": {
+      "landSize": "number (hectares)",
+      "region": "string",
+      "soilType": "string",
+      "budget": "number (Rs)",
+      "waterAvailability": "enum: high|medium|low",
+      "preferredSeason": "enum: kharif|rabi|both",
+      "experience": "enum: beginner|intermediate|advanced"
+    },
+    "Recommendation": {
+      "crop": "Crop object",
+      "suitability": "number (0-100)",
+      "reasons": "string[]",
+      "estimatedProfit": "number (Rs)",
+      "riskLevel": "enum: low|medium|high",
+      "calendar": "CalendarEvent[]"
+    },
+    "CalendarEvent": {
+      "month": "number (1-12)",
+      "activity": "string",
+      "hindiActivity": "string"
+    }
+  },
+  "recommendationAlgorithm": {
+    "description": "Multi-factor scoring system that evaluates crop suitability based on farm conditions",
+    "factors": [
+      {
+        "name": "Season Matching",
+        "weight": 20,
+        "description": "Checks if crop season aligns with farmer preference"
+      },
+      {
+        "name": "Soil Compatibility",
+        "weight": 15,
+        "description": "Verifies soil type is suitable for the crop"
+      },
+      {
+        "name": "Budget Feasibility",
+        "weight": 25,
+        "description": "Ensures cultivation cost fits within farmer's budget"
+      },
+      {
+        "name": "Water Availability",
+        "weight": 20,
+        "description": "Matches water requirements with available resources"
+      },
+      {
+        "name": "Experience Level",
+        "weight": 10,
+        "description": "Adjusts recommendations based on farming experience"
+      },
+      {
+        "name": "Profitability",
+        "weight": 10,
+        "description": "Prioritizes crops with higher profit margins"
+      }
+    ],
+    "scoringFormula": "Suitability = Base(100) - Season_Penalty + Water_Score - Budget_Penalty - Experience_Penalty + Profitability_Bonus"
+  },
+  "cropDatabase": {
+    "totalCrops": 8,
+    "crops": [
+      "Wheat (Rabi)",
+      "Rice (Kharif)",
+      "Cotton (Kharif)",
+      "Maize (Kharif)",
+      "Groundnut (Kharif)",
+      "Chickpea (Rabi)",
+      "Soybean (Kharif)",
+      "Sugarcane (Both)"
+    ],
+    "coverage": {
+      "regions": 5,
+      "soilTypes": 4,
+      "seasons": 3
+    }
+  },
+  "fileStructure": {
+    "app/": {
+      "page.tsx": "Main landing page with form and results display",
+      "layout.tsx": "Root layout with metadata and styling",
+      "globals.css": "Global styles and design tokens"
+    },
+    "components/": {
+      "farmer-form.tsx": "Input form component for farm data collection",
+      "recommendation-card.tsx": "Display component for individual crop recommendations"
+    },
+    "lib/": {
+      "crop-database.ts": "Crop data, soil types, and regional information",
+      "recommendation-engine.ts": "Core recommendation algorithm and calendar generation"
+    }
+  },
+  "apiEndpoints": [
+    {
+      "method": "POST",
+      "endpoint": "/api/recommendations",
+      "description": "Get crop recommendations based on farmer input",
+      "requestBody": {
+        "landSize": "number",
+        "region": "string",
+        "soilType": "string",
+        "budget": "number",
+        "waterAvailability": "string",
+        "preferredSeason": "string",
+        "experience": "string"
+      },
+      "responseBody": {
+        "recommendations": [
+          {
+            "crop": "object",
+            "suitability": "number",
+            "reasons": "string[]",
+            "estimatedProfit": "number",
+            "riskLevel": "string",
+            "calendar": "object[]"
+          }
+        ]
+      }
+    }
+  ],
+  "userJourney": [
+    "User lands on homepage and sees form",
+    "User fills in farm details (land size, region, soil type, budget, water, season, experience)",
+    "System processes input through recommendation engine",
+    "Top 3-5 suitable crops are displayed with detailed information",
+    "User can view suitability score, profit projections, and farming calendar for each crop",
+    "User can make informed decision based on recommendations"
+  ],
+  "multiLanguageSupport": {
+    "languages": ["English", "Hindi"],
+    "coverage": ["Crop names", "Region names", "Soil type names", "Farming activities", "UI labels"]
+  },
+  "performanceMetrics": {
+    "recommendationTime": "< 500ms",
+    "pageLoadTime": "< 2s",
+    "mobileOptimized": true,
+    "accessibilityScore": "WCAG 2.1 AA"
+  },
+  "futureEnhancements": [
+    "Integration with real-time weather APIs",
+    "Market price tracking and updates",
+    "Pest and disease prediction models",
+    "Soil testing integration",
+    "Farmer community forum",
+    "Mobile app (iOS/Android)",
+    "SMS-based recommendations for low-connectivity areas",
+    "Integration with government schemes and subsidies",
+    "Crop insurance recommendations",
+    "Supply chain marketplace"
+  ],
+  "dataSource": {
+    "cropData": "Indian Council of Agricultural Research (ICAR) guidelines",
+    "costData": "Directorate of Economics and Statistics (DES) surveys",
+    "weatherData": "India Meteorological Department (IMD)",
+    "soilData": "National Bureau of Soil Survey and Land Use Planning (NBSS&LUP)"
+  },
+  "limitations": [
+    "Current system uses static crop database - real-time market prices not included",
+    "Weather predictions are not integrated - uses historical averages",
+    "Soil testing must be done manually by farmers",
+    "Pest prediction is rule-based, not ML-powered",
+    "Regional variations within states not considered"
+  ],
+  "successMetrics": [
+    "Farmer adoption rate",
+    "Accuracy of recommendations (farmer feedback)",
+    "Improvement in crop yield",
+    "Reduction in cultivation costs",
+    "Increase in farmer income",
+    "User retention rate"
+  ],
+  "deployment": {
+    "platform": "Vercel",
+    "environment": "Production",
+    "scaling": "Serverless (auto-scaling)",
+    "monitoring": "Vercel Analytics"
+  },
+  "team": {
+    "role": "Full-stack developer",
+    "responsibilities": [
+      "System design and architecture",
+      "Frontend development",
+      "Backend logic implementation",
+      "Database design",
+      "Testing and deployment"
+    ]
+  }
+}
