@@ -14,7 +14,7 @@ Any changes you make to your deployed app will be automatically pushed to this r
 
 Your project is live at:
 
-**[https://v0-farming-advisory-system.vercel.app/](https://v0-farming-advisory-system.vercel.app/)**
+**[https://vercel.com/arifs-projects-0cf5d6c1/v0-farming-advisory-system](https://vercel.com/arifs-projects-0cf5d6c1/v0-farming-advisory-system)**
 
 ## Build your app
 
